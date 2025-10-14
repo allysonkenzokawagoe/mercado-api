@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -34,15 +35,17 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("oauth").permitAll()
                         .requestMatchers("/api/usuario", "/api/usuario/**").permitAll()
                         .requestMatchers("/api/cargo", "api/cargo/**").permitAll()
                         .requestMatchers("/api/endereco", "/api/endereco/**").permitAll()
                         .requestMatchers("/api/mercado", "/api/mercado/**").permitAll()
                         .requestMatchers("/api/filial",  "/api/filial/**").permitAll()
-                        .requestMatchers("/api/categoria", "/api/categoria/**").permitAll()
+                        .requestMatchers("/api/categoria", "/api/categoria/**").authenticated()
                         .requestMatchers("/api/produto", "/api/produto/**").permitAll()
                         .requestMatchers("/api/estoque", "/api/estoque/**").permitAll()
                         .anyRequest().authenticated())
+                .sessionManagement(ss -> ss.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(daoAuthenticationProvider())
                 .build();
     }

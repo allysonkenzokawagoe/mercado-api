@@ -27,7 +27,7 @@ public class Mercado {
     @Column(name = "CNPJ")
     private Integer cpnj;
 
-    @OneToMany
+    @OneToMany(mappedBy = "mercado")
     private List<Filial> filials;
 
     public static Mercado of(String nome) {

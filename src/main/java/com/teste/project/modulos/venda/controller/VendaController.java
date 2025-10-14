@@ -28,6 +28,4 @@ public class VendaController {
     public void finalizarVenda(@PathVariable Integer vendaId, @RequestBody ETipoPagamento tipoPagamento) {
         produtoVendaService.finalizarVenda(vendaId, tipoPagamento);
     }
-
-
 }

@@ -1,6 +1,7 @@
 package com.teste.project.modulos.estoque.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.teste.project.modulos.filiais.model.Filial;
 import com.teste.project.modulos.produtos.model.Produto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,15 +29,20 @@ public class Estoque {
     @Column(name = "ULTIMA_ATUALIZACAO")
     private LocalDateTime ultimaAtualizacao;
 
+    @ManyToOne
+    @JoinColumn(name = "FK_FILIAL", foreignKey = @ForeignKey(name = "FK_FILIAL_ESTOQUE"), nullable = false)
+    private Filial filial;
+
     @JsonIgnore
     @OneToOne
     @JoinColumn(name = "fk_produto", foreignKey = @ForeignKey(name = "fk_produto_estoque"), nullable = false)
     private Produto produto;
 
-    public static Estoque of(Produto produto) {
+    public static Estoque of(Produto produto, Filial filial) {
         return Estoque.builder()
                 .quantidade(0.0)
                 .produto(produto)
+                .filial(filial)
                 .build();
     }
 

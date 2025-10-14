@@ -3,6 +3,7 @@ package com.teste.project.modulos.produtos.model;
 import com.teste.project.modulos.categoria.model.Categoria;
 import com.teste.project.modulos.estoque.model.Estoque;
 import com.teste.project.modulos.produtos.dto.ProdutoRequest;
+import com.teste.project.modulos.produtos.enums.ESituacaoProduto;
 import com.teste.project.modulos.produtos.enums.ETipoMedida;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,10 @@ public class Produto {
     @Enumerated(EnumType.STRING)
     private ETipoMedida tipoMedida;
 
+    @Column(name = "SITUACAO")
+    @Enumerated(EnumType.STRING)
+    private ESituacaoProduto situacao;
+
     @JoinColumn(name = "FK_CATEGORIA", foreignKey = @ForeignKey(name = "FK_CATEGORIA_USUARIO"),nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Categoria categoria;
@@ -48,9 +53,11 @@ public class Produto {
     public static Produto of(ProdutoRequest request) {
         return Produto.builder()
                 .nome(request.nome())
+                .marca(request.marca())
                 .descricao(request.descricao())
+                .preco(request.preco())
                 .tipoMedida(request.tipoMedida())
+                .situacao(ESituacaoProduto.FORA_ESTOQUE)
                 .build();
     }
-
 }

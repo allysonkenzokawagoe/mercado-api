@@ -6,6 +6,7 @@ CREATE TABLE produto
     descricao    VARCHAR(255),
     preco        DOUBLE PRECISION,
     tipo_medida  VARCHAR(255),
+    situacao     VARCHAR(255),
     fk_categoria INT                                  NOT NULL,
     CONSTRAINT pk_produto PRIMARY KEY (id)
 );

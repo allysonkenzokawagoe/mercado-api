@@ -3,7 +3,6 @@ package com.teste.project.modulos.autenticacao.service;
 import com.teste.project.modulos.autenticacao.dto.UsuarioAutenticado;
 import com.teste.project.modulos.comum.exceptions.NotFoundException;
 import com.teste.project.modulos.user.repository.UserRepository;
-import com.teste.project.modulos.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

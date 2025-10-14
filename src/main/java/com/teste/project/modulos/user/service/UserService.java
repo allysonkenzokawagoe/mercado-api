@@ -2,23 +2,23 @@ package com.teste.project.modulos.user.service;
 
 import com.teste.project.modulos.autenticacao.service.AutenticacaoService;
 import com.teste.project.modulos.cargo.service.CargoService;
+import com.teste.project.modulos.comum.dto.PageResponse;
 import com.teste.project.modulos.comum.exceptions.NotFoundException;
 import com.teste.project.modulos.endereco.service.EnderecoService;
 import com.teste.project.modulos.filiais.service.FilialService;
 import com.teste.project.modulos.user.dto.UserRequest;
 import com.teste.project.modulos.user.dto.UsuarioFiltro;
+import com.teste.project.modulos.user.dto.UsuarioRequestEdit;
 import com.teste.project.modulos.user.dto.UsuarioResponse;
+import com.teste.project.modulos.user.enums.ESituacao;
 import com.teste.project.modulos.user.mapper.UsuarioMapper;
 import com.teste.project.modulos.user.model.Usuario;
 import com.teste.project.modulos.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class UserService {
     private final CargoService cargoService;
     private final FilialService filialService;
     private final AutenticacaoService autenticacaoService;
-    private final UsuarioMapper usuarioMapper;
+    private final UsuarioMapper mapper;
 
     @Transactional
     public void register(UserRequest request, Integer filialId) {
@@ -46,13 +46,34 @@ public class UserService {
         repository.save(user);
     }
 
-    public List<UsuarioResponse> findAllByCargoId(Integer cargoId) {
-        return usuarioMapper.toResponse(repository.findAllByCargoId(cargoId));
+    @Transactional
+    public UsuarioResponse editar(String id, UsuarioRequestEdit request) {
+        var usuario = getById(id);
+
+        mapper.map(request, usuario);
+
+        repository.save(usuario);
+
+        return mapper.toResponse(usuario);
     }
 
-    public Page<UsuarioResponse> findAll(UsuarioFiltro filtro, PageRequest pageRequest) {
+    @Transactional
+    public void inativar(String id) {
+        var usuario = getById(id);
+        usuario.setSituacao(ESituacao.INATIVO);
+        repository.save(usuario);
+    }
+
+    public PageResponse<UsuarioResponse> findAllByCargoId(Integer cargoId) {
+        var pageRequest = PageRequest.of(0, 20);
+        var usuarios = repository.findAllByCargoId(cargoId, pageRequest).map(mapper::toResponse);
+        return PageResponse.from(usuarios);
+    }
+
+    public PageResponse<UsuarioResponse> findAll(UsuarioFiltro filtro, PageRequest pageRequest) {
         var predicate = filtro.toPredicate(autenticacaoService.getUsuarioAutenticado());
-        return repository.findAllByPredicate(predicate, pageRequest);
+        var usuarios = repository.findAllByPredicate(predicate, pageRequest);
+        return PageResponse.from(usuarios);
     }
 
     public Usuario getById(String id) {

@@ -30,7 +30,7 @@ public class Filial {
     @JoinColumn(name = "FK_MERCADO", foreignKey = @ForeignKey(name = "FK_MERCADO_FILIAL"), nullable = false)
     private Mercado mercado;
 
-    @OneToMany
+    @OneToMany(mappedBy = "filial")
     private List<Usuario> usuarios;
 
     public static Filial of(Endereco endereco, Mercado mercado) {

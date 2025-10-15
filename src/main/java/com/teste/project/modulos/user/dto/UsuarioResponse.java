@@ -9,6 +9,7 @@ public record UsuarioResponse(
         String id,
         String nome,
         String email,
+        String senha,
         LocalDate dataNascimento,
         Integer cpf,
         EnderecoResponse endereco,

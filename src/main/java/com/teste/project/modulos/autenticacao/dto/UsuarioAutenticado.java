@@ -35,8 +35,8 @@ public class UsuarioAutenticado {
                 .usuarioId(usuario.getId())
                 .usuarioNome(usuario.getNome())
                 .usuarioEmail(usuario.getEmail())
-                .permissao(usuario.getCargo().getPermissoes().getFirst())
-                .roles(usuario.getCargo().getPermissoes().stream().map(EPermissao::getRole).collect(Collectors.toList()))
+                .permissao(usuario.getCargo().getPermissao())
+                .roles(List.of(usuario.getCargo().getPermissao().getRoleName()))
                 .build();
     }
 

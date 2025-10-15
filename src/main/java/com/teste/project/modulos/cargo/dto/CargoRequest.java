@@ -6,6 +6,6 @@ import java.util.List;
 
 public record CargoRequest(
         String nome,
-        List<EPermissao> permissoes
+        EPermissao permissao
 ) {
 }

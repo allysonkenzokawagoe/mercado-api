@@ -3,6 +3,7 @@ package com.teste.project.modulos.autenticacao.service;
 import com.teste.project.modulos.autenticacao.dto.UsuarioAutenticado;
 import com.teste.project.modulos.autenticacao.util.TokenUtils;
 import com.teste.project.modulos.comum.exceptions.UnauthorizedException;
+import io.jsonwebtoken.io.Decoders;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +26,7 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(usuario.getUsuarioEmail())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() * 60 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .claim("usuarioId", usuario.getUsuarioId())
                 .claim("usuarioNome", usuario.getUsuarioNome())
@@ -65,7 +66,7 @@ public class JwtService {
     }
 
     private Key getKey() {
-        return Keys.hmacShaKeyFor(Base64.getDecoder().decode(secret));
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
 }

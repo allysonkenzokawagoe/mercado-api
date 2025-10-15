@@ -29,8 +29,8 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public PageResponse<UsuarioResponse> buscarTodos(UsuarioFiltro filtro, PageRequest pageRequest) {
-        return service.findAll(filtro, pageRequest);
+    public PageResponse<UsuarioResponse> buscarTodos(UsuarioFiltro filtro) {
+        return service.findAll(filtro);
     }
 
     @PutMapping("{id}")

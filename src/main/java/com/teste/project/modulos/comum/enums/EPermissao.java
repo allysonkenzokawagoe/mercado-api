@@ -11,7 +11,7 @@ public enum EPermissao {
     GERENTE("GERENTE"),
     FUNCIONARIO("FUNCIONARIO");
 
-    public String getRole() {
+    public String getRoleName() {
         return "ROLE_" + name();
     }
 

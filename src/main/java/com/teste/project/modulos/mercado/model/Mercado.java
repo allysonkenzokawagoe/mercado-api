@@ -2,10 +2,7 @@ package com.teste.project.modulos.mercado.model;
 
 import com.teste.project.modulos.filiais.model.Filial;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@ToString(exclude = "filials")
 @Entity
 @Table(name = "MERCADO")
 public class Mercado {

@@ -25,20 +25,33 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var token = TokenUtils.getHeaderToken();
+        var token = TokenUtils.getHeaderToken(request);
 
-        if(token != null && isAuthController(request) && jwtService.isTokenValid(token)) {
+        if(token != null && !isAuthController(request) && jwtService.isTokenValid(token)) {
             var userDetails = customUserDetailsService.loadUserByUsername(jwtService.extractUsername(token));
             var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            verificarAutenticacao();
         }
 
         filterChain.doFilter(request, response);
     }
 
+    public void verificarAutenticacao() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            System.out.println("Nenhuma autenticação está configurada no contexto.");
+        } else {
+            System.out.println("Usuário autenticado: " + authentication.getName());
+            System.out.println("Detalhes: " + authentication.getDetails());
+            System.out.println("Roles: " + authentication.getAuthorities());
+            System.out.println("Está autenticado? " + authentication.isAuthenticated());
+        }
+    }
+
     private boolean isAuthController(HttpServletRequest request) {
-        return request.getRequestURI().contains("/oauth");
+        return request.getRequestURI().contains("/oauth/");
     }
 }

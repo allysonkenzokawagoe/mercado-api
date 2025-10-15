@@ -9,6 +9,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.regex.Pattern;
+
 @RequiredArgsConstructor
 @Service
 public class AutenticacaoService {
@@ -17,11 +19,15 @@ public class AutenticacaoService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
 
-    public UsuarioAutenticado autenticarUsuario(String username, String password) throws Exception {
+    public UsuarioAutenticado autenticarUsuario(String username, String password) {
+        System.out.println("a");
         var authToken = new UsernamePasswordAuthenticationToken(username, password);
+        System.out.println("b");
         var authetication = authenticationManager.authenticate(authToken);
+        System.out.println("c");
         SecurityContextHolder.getContext().setAuthentication(authetication);
 
+        System.out.println(jwtService.getTokenData());
         var usuario = getUsuarioAutenticado();
         var jwt = jwtService.gerarJwt(usuario);
         usuario.setToken(jwt);
@@ -30,6 +36,8 @@ public class AutenticacaoService {
 
     public UsuarioAutenticado getUsuarioAutenticado() {
         if(hasAuthentication()) {
+            System.out.println(getUsuarioId());
+            System.out.println(userRepository.findById(getUsuarioId()));
             return jwtService.getTokenData()
                     .map(UsuarioAutenticado::new)
                     .orElseGet(() -> UsuarioAutenticado.of(
@@ -40,7 +48,11 @@ public class AutenticacaoService {
     }
 
     public String getUsuarioId() {
-        return SecurityContextHolder.getContext().getAuthentication().getName().split("-")[0];
+        var pt1 =  SecurityContextHolder.getContext().getAuthentication().getName().split(Pattern.quote("-"))[0];
+        var pt2 =  SecurityContextHolder.getContext().getAuthentication().getName().split(Pattern.quote("-"))[1];
+        var pt3 =  SecurityContextHolder.getContext().getAuthentication().getName().split(Pattern.quote("-"))[2];
+
+        return pt1+"-"+pt2+"-"+pt3;
     }
 
     private static boolean hasAuthentication() {

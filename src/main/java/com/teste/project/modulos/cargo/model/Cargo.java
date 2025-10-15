@@ -27,7 +27,7 @@ public class Cargo {
 
     @Column(name = "PERMISSOES")
     @Enumerated(EnumType.STRING)
-    private List<EPermissao> permissoes;
+    private EPermissao permissao;
 
     @OneToMany(mappedBy = "cargo")
     @JsonIgnore
@@ -36,7 +36,7 @@ public class Cargo {
     public static Cargo of(CargoRequest request) {
         return Cargo.builder()
                 .nome(request.nome())
-                .permissoes(request.permissoes())
+                .permissao(request.permissao())
                 .build();
     }
 }

@@ -81,7 +81,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<SimpleGrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(cargo.getPermissoes().toString()));
+        return List.of(new SimpleGrantedAuthority(cargo.getPermissao().getRoleName()));
     }
 
     @Override

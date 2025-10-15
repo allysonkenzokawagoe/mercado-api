@@ -70,7 +70,8 @@ public class UserService {
         return PageResponse.from(usuarios);
     }
 
-    public PageResponse<UsuarioResponse> findAll(UsuarioFiltro filtro, PageRequest pageRequest) {
+    public PageResponse<UsuarioResponse> findAll(UsuarioFiltro filtro) {
+        var pageRequest = PageRequest.of(0, 20);
         var predicate = filtro.toPredicate(autenticacaoService.getUsuarioAutenticado());
         var usuarios = repository.findAllByPredicate(predicate, pageRequest);
         return PageResponse.from(usuarios);

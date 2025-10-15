@@ -3,7 +3,7 @@ server:
 
 app-config:
   oauth:
-    jwt-secret: 7b615e6dc7682359c47cd11ff64b8f23
+    jwt-secret: d11714514a6d45b917d87aebd5f14f31f71c4f6f40a60022c2480b0ac4840ea5
 
   cep:
     url: https://viacep.com.br/ws/%d/json/
@@ -31,3 +31,11 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password:
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        security.authentication: DEBUG
+        security.web.access: DEBUG

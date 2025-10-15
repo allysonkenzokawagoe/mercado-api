@@ -4,10 +4,7 @@ import com.teste.project.modulos.endereco.model.Endereco;
 import com.teste.project.modulos.mercado.model.Mercado;
 import com.teste.project.modulos.user.model.Usuario;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -15,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@ToString(exclude = {"endereco", "usuarios"})
 @Entity
 @Table(name = "FILIAL")
 public class Filial {

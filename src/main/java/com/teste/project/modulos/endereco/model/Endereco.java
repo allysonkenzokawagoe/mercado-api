@@ -2,15 +2,14 @@ package com.teste.project.modulos.endereco.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.teste.project.modulos.endereco.dto.CepResponse;
+import com.teste.project.modulos.filiais.model.Filial;
 import com.teste.project.modulos.user.model.Usuario;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @Data
+@ToString(exclude = {"usuario", "filial"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -38,6 +37,10 @@ public class Endereco {
 
     @Column(name = "CEP")
     private String cep;
+
+    @OneToOne(mappedBy = "endereco")
+    @JsonIgnore
+    private Filial filial;
 
     @OneToOne(mappedBy = "endereco")
     @JsonIgnore

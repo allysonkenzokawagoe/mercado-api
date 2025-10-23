@@ -20,14 +20,10 @@ public class AutenticacaoService {
     private final UserRepository userRepository;
 
     public UsuarioAutenticado autenticarUsuario(String username, String password) {
-        System.out.println("a");
         var authToken = new UsernamePasswordAuthenticationToken(username, password);
-        System.out.println("b");
         var authetication = authenticationManager.authenticate(authToken);
-        System.out.println("c");
         SecurityContextHolder.getContext().setAuthentication(authetication);
 
-        System.out.println(jwtService.getTokenData());
         var usuario = getUsuarioAutenticado();
         var jwt = jwtService.gerarJwt(usuario);
         usuario.setToken(jwt);
@@ -36,8 +32,6 @@ public class AutenticacaoService {
 
     public UsuarioAutenticado getUsuarioAutenticado() {
         if(hasAuthentication()) {
-            System.out.println(getUsuarioId());
-            System.out.println(userRepository.findById(getUsuarioId()));
             return jwtService.getTokenData()
                     .map(UsuarioAutenticado::new)
                     .orElseGet(() -> UsuarioAutenticado.of(

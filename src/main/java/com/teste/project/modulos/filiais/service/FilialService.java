@@ -1,5 +1,6 @@
 package com.teste.project.modulos.filiais.service;
 
+import com.teste.project.modulos.comum.exceptions.NotFoundException;
 import com.teste.project.modulos.comum.exceptions.ValidacaoException;
 import com.teste.project.modulos.endereco.service.EnderecoService;
 import com.teste.project.modulos.filiais.dto.FilialRequest;
@@ -20,14 +21,14 @@ public class FilialService {
 
     @Transactional
     public void salvar(FilialRequest filialRequest, Integer mercadoId) {
+        var mercado = mercadoService.getById(mercadoId);
         var endereco = enderecoService.salvarEndereco(filialRequest.numero(), filialRequest.cep());
-        var mercado = mercadoService.getMercado(mercadoId);
-        var filial = Filial.of(endereco, mercado);
+        var filial = Filial.of(endereco,  filialRequest.cnpj(), mercado);
         repository.save(filial);
     }
 
     public Filial getById(Integer id) {
-        return repository.findById(id).orElseThrow(() -> new ValidacaoException("Filian não encontrada"));
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Filial não encontrada"));
     }
 
 }

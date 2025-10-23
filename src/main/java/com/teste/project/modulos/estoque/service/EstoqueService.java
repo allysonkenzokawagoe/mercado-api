@@ -1,12 +1,13 @@
 package com.teste.project.modulos.estoque.service;
 
 import com.teste.project.modulos.comum.dto.PageResponse;
+import com.teste.project.modulos.comum.exceptions.NotFoundException;
 import com.teste.project.modulos.estoque.dto.EstoqueResponse;
 import com.teste.project.modulos.estoque.mapper.EstoqueMapper;
 import com.teste.project.modulos.estoque.model.Estoque;
 import com.teste.project.modulos.estoque.repository.EstoqueRepository;
 import com.teste.project.modulos.filiais.model.Filial;
-import com.teste.project.modulos.produtos.model.Produto;
+import com.teste.project.modulos.produtos.model.ProdutoFilial;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,13 @@ public class EstoqueService {
     private final EstoqueRepository repository;
     private final EstoqueMapper mapper;
 
-    public void criarEstoque(Produto produto, Filial filial) {
-        var estoque = Estoque.of(produto, filial);
+    public void criarEstoque(ProdutoFilial produtoFilial, Filial filial) {
+        var estoque = Estoque.of(produtoFilial, filial);
         salvar(estoque);
     }
 
-    public void adicionarEstoque(Integer produtoId, Double quantidade) {
-        var estoque = getByProdutoId(produtoId);
+    public void adicionarEstoque(Integer produtoFilialId, Double quantidade) {
+        var estoque = getByProdutoId(produtoFilialId);
         estoque.setQuantidade(quantidade);
         estoque.setUltimaAtualizacao(LocalDateTime.now());
 
@@ -39,8 +40,8 @@ public class EstoqueService {
         return PageResponse.from(estoque);
     }
 
-    public Estoque getByProdutoId(Integer produtoId) {
-        return repository.findByProdutoId(produtoId);
+    public Estoque getByProdutoId(Integer produtoFilialId) {
+        return repository.findByProdutoFilialId(produtoFilialId).orElseThrow(() -> new NotFoundException("Estoque não encontrado"));
     }
 
     public Estoque salvar(Estoque estoque) {

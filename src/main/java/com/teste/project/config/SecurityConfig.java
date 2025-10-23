@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -45,14 +46,16 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/oauth", "/oauth/**").permitAll()
-                        .requestMatchers("/api/usuario", "/api/usuario/**").permitAll()
+                        .requestMatchers("/oauth").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/usuario/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/usuario", "/api/usuario/**").hasAnyRole("ADMIN", "GERENTE")
                         .requestMatchers("/api/cargo", "/api/cargo/**").permitAll()
                         .requestMatchers("/api/endereco", "/api/endereco/**").permitAll()
                         .requestMatchers("/api/mercado", "/api/mercado/**").permitAll()
                         .requestMatchers("/api/filial",  "/api/filial/**").permitAll()
-                        .requestMatchers("/api/categoria", "/api/categoria/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/api/categoria", "/api/categoria/**").permitAll()
                         .requestMatchers("/api/produto", "/api/produto/**").permitAll()
+                        .requestMatchers("/api/produto-filial", "/api/produto-filial/**").permitAll()
                         .requestMatchers("/api/estoque", "/api/estoque/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(FormLoginConfigurer::disable)

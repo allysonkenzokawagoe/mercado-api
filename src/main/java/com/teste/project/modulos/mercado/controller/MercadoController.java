@@ -1,5 +1,6 @@
 package com.teste.project.modulos.mercado.controller;
 
+import com.teste.project.modulos.mercado.dto.MercadoRequest;
 import com.teste.project.modulos.mercado.service.MercadoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +16,8 @@ public class MercadoController {
     private final MercadoService service;
 
     @PostMapping
-    public void salvar(@RequestBody String nome) {
-        service.salvar(nome);
+    public void cadastrar(@RequestBody MercadoRequest request) {
+        service.cadastrar(request);
     }
 
 }

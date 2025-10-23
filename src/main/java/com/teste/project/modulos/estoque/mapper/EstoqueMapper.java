@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface EstoqueMapper {
 
-    @Mapping(target = "produtoNome", source = "produto.nome")
+    @Mapping(target = "produtoNome", source = "produtoFilial.produto.nome")
     EstoqueResponse toResponse(Estoque estoque);
 
 }

@@ -1,9 +1,11 @@
 package com.teste.project.modulos.user.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.teste.project.modulos.cargo.model.Cargo;
 import com.teste.project.modulos.comum.utils.IdUtils;
 import com.teste.project.modulos.endereco.model.Endereco;
 import com.teste.project.modulos.filiais.model.Filial;
+import com.teste.project.modulos.mercado.model.Mercado;
 import com.teste.project.modulos.user.dto.UserRequest;
 import com.teste.project.modulos.user.enums.ESituacao;
 import jakarta.persistence.*;
@@ -59,17 +61,19 @@ public class Usuario implements UserDetails {
     @JoinColumn(name = "FK_CARGO", foreignKey = @ForeignKey(name = "FK_CARGO_USER"), nullable = false)
     private Cargo cargo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_FILIAL", foreignKey = @ForeignKey(name = "FK_FILIAL_USUARIO"), nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "FK_FILIAL")
+    @JsonBackReference
     private Filial filial;
 
-    public static Usuario of(UserRequest request) {
+    public static Usuario of(UserRequest request, Filial filial) {
         return Usuario.builder()
                 .nome(request.nome())
                 .email(request.email())
                 .cpf(request.cpf())
                 .situacao(ESituacao.ATIVO)
                 .salario(request.salario())
+                .filial(filial)
                 .build();
     }
 

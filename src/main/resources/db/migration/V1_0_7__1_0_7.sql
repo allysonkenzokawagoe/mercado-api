@@ -4,9 +4,7 @@ CREATE TABLE produto
     nome         VARCHAR(255),
     marca        VARCHAR(255),
     descricao    VARCHAR(255),
-    preco        DOUBLE PRECISION,
     tipo_medida  VARCHAR(255),
-    situacao     VARCHAR(255),
     fk_categoria INT                                  NOT NULL,
     CONSTRAINT pk_produto PRIMARY KEY (id)
 );

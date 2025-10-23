@@ -1,8 +1,8 @@
 package com.teste.project.modulos.estoque.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.teste.project.modulos.filiais.model.Filial;
 import com.teste.project.modulos.produtos.model.Produto;
+import com.teste.project.modulos.produtos.model.ProdutoFilial;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,17 +33,15 @@ public class Estoque {
     @JoinColumn(name = "FK_FILIAL", foreignKey = @ForeignKey(name = "FK_FILIAL_ESTOQUE"), nullable = false)
     private Filial filial;
 
-    @JsonIgnore
     @OneToOne
-    @JoinColumn(name = "fk_produto", foreignKey = @ForeignKey(name = "fk_produto_estoque"), nullable = false)
-    private Produto produto;
+    @JoinColumn(name = "FK_PRODUTO_FILIAL", foreignKey = @ForeignKey(name = "FK_PRODUTO_FILIAL_ESTOQUE"), nullable = false)
+    private ProdutoFilial produtoFilial;
 
-    public static Estoque of(Produto produto, Filial filial) {
+    public static Estoque of(ProdutoFilial produtoFilial, Filial filial) {
         return Estoque.builder()
                 .quantidade(0.0)
-                .produto(produto)
                 .filial(filial)
+                .produtoFilial(produtoFilial)
                 .build();
     }
-
 }

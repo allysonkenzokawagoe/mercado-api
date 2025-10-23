@@ -1,6 +1,9 @@
 package com.teste.project.modulos.mercado.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.teste.project.modulos.filiais.model.Filial;
+import com.teste.project.modulos.mercado.dto.MercadoRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString(exclude = "filials")
 @Entity
 @Table(name = "MERCADO")
 public class Mercado {
@@ -23,14 +25,12 @@ public class Mercado {
     private String nome;
 
     @Column(name = "CNPJ")
-    private Integer cpnj;
+    private String cnpj;
 
-    @OneToMany(mappedBy = "mercado")
-    private List<Filial> filials;
-
-    public static Mercado of(String nome) {
+    public static Mercado of(MercadoRequest request) {
         return Mercado.builder()
-                .nome(nome)
+                .nome(request.nome())
+                .cnpj(request.cnpj())
                 .build();
     }
 

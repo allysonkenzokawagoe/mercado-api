@@ -1,9 +1,8 @@
 package com.teste.project.modulos.produtos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.teste.project.modulos.categoria.model.Categoria;
-import com.teste.project.modulos.estoque.model.Estoque;
 import com.teste.project.modulos.produtos.dto.ProdutoRequest;
-import com.teste.project.modulos.produtos.enums.ESituacaoProduto;
 import com.teste.project.modulos.produtos.enums.ETipoMedida;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "PRODUTO")
 public class Produto {
 
@@ -32,32 +32,20 @@ public class Produto {
     @Column(name = "DESCRICAO")
     private String descricao;
 
-    @Column(name = "PRECO")
-    private Double preco;
-
     @Column(name = "TIPO_MEDIDA")
     @Enumerated(EnumType.STRING)
     private ETipoMedida tipoMedida;
 
-    @Column(name = "SITUACAO")
-    @Enumerated(EnumType.STRING)
-    private ESituacaoProduto situacao;
-
     @JoinColumn(name = "FK_CATEGORIA", foreignKey = @ForeignKey(name = "FK_CATEGORIA_USUARIO"),nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Categoria categoria;
-
-    @OneToOne(mappedBy = "produto")
-    private Estoque estoque;
 
     public static Produto of(ProdutoRequest request) {
         return Produto.builder()
                 .nome(request.nome())
                 .marca(request.marca())
                 .descricao(request.descricao())
-                .preco(request.preco())
                 .tipoMedida(request.tipoMedida())
-                .situacao(ESituacaoProduto.FORA_ESTOQUE)
                 .build();
     }
 }

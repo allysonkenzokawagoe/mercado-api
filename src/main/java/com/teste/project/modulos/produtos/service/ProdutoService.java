@@ -3,17 +3,13 @@ package com.teste.project.modulos.produtos.service;
 import com.teste.project.modulos.categoria.service.CategoriaService;
 import com.teste.project.modulos.comum.dto.PageResponse;
 import com.teste.project.modulos.comum.exceptions.ValidacaoException;
-import com.teste.project.modulos.estoque.service.EstoqueService;
-import com.teste.project.modulos.filiais.service.FilialService;
 import com.teste.project.modulos.produtos.dto.ProdutoRequest;
 import com.teste.project.modulos.produtos.dto.ProdutoRequestEdit;
 import com.teste.project.modulos.produtos.dto.ProdutoResponse;
-import com.teste.project.modulos.produtos.enums.ESituacaoProduto;
 import com.teste.project.modulos.produtos.mapper.ProdutoMapper;
 import com.teste.project.modulos.produtos.model.Produto;
 import com.teste.project.modulos.produtos.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,32 +19,18 @@ import org.springframework.stereotype.Service;
 public class ProdutoService {
 
     private final ProdutoRepository repository;
-    private final EstoqueService estoqueService;
     private final CategoriaService categoriaService;
-    private final FilialService filialService;
     private final ProdutoMapper mapper;
 
     @Transactional
-    public void cadastrar(ProdutoRequest request, Integer filialId) {
+    public void cadastrar(ProdutoRequest request) {
         validarProduto(request.nome(), request.marca());
 
         var produto = Produto.of(request);
-        var filial = filialService.getById(filialId);
 
         produto.setCategoria(categoriaService.getById(request.categoriaId()));
 
         repository.save(produto);
-        estoqueService.criarEstoque(produto, filial);
-    }
-
-    @Transactional
-    public void adicionarAoEstoque(Integer id, Double quantidade) {
-        var produto = getById(id);
-
-        estoqueService.adicionarEstoque(id, quantidade);
-
-        validarSituacao(produto);
-        save(produto);
     }
 
     @Transactional
@@ -61,6 +43,7 @@ public class ProdutoService {
         }
 
         save(produto);
+        System.out.println("Produto: " + produto.getNome());
         return mapper.toResponse(produto);
     }
 
@@ -80,17 +63,7 @@ public class ProdutoService {
 
     private void validarProduto(String nome, String marca) {
         if(repository.existsByNomeAndMarca(nome, marca)) {
-            throw new ValidationException("Produto já existente");
-        }
-    }
-
-    private void validarSituacao(Produto produto) {
-        if(produto.getEstoque().getQuantidade() == 0) {
-            produto.setSituacao(ESituacaoProduto.FORA_ESTOQUE);
-        } else if(produto.getEstoque().getQuantidade() > 0) {
-            produto.setSituacao(ESituacaoProduto.EM_ESTOQUE);
-        } else if(produto.getEstoque().getQuantidade() < 0) {
-            throw new ValidationException("O estoque não pode ser menor do que 0");
+            throw new ValidacaoException("Produto já existente");
         }
     }
 }

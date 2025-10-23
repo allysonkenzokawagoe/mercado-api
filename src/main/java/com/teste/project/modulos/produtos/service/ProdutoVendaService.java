@@ -17,17 +17,17 @@ import java.util.List;
 public class ProdutoVendaService {
 
     private final ProdutoVendaRepository repository;
-    private final ProdutoService produtoService;
+    private final ProdutoFilialService produtoFilialService;
     private final VendaService vendaService;
     private final EstoqueService estoqueService;
 
     @Transactional
-    public void cadastrarProdutoVenda(Integer vendaId, Integer produtoId, Double quantidade) {
+    public void cadastrarProdutoVenda(Integer vendaId, Integer produtoFilialId, Double quantidade) {
         var venda = vendaService.getById(vendaId);
-        var produto = produtoService.getById(produtoId);
+        var produto = produtoFilialService.findById(produtoFilialId);
         var valor = quantidade * produto.getPreco();
         var produtoVenda = ProdutoVenda.of(produto, venda, quantidade, valor);
-        var estoque = estoqueService.getByProdutoId(produtoId);
+        var estoque = estoqueService.getByProdutoId(produtoFilialId);
 
         estoque.setQuantidade(estoque.getQuantidade() - quantidade);
 

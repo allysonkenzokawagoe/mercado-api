@@ -30,16 +30,16 @@ public class ProdutoVenda {
     private LocalDateTime dataVenda;
 
     @ManyToOne
-    @JoinColumn(name = "FK_PRODUTO", foreignKey = @ForeignKey(name = "FK_PRODUTO_PRODUTO_VENDIDO"), nullable = false)
-    private Produto produto;
+    @JoinColumn(name = "FK_PRODUTO_FILIAL", foreignKey = @ForeignKey(name = "FK_PRODUTO_FILIAL_PRODUTO_VENDIDO"), nullable = false)
+    private ProdutoFilial produtoFilial;
 
     @ManyToOne
     @JoinColumn(name = "FK_VENDA", foreignKey = @ForeignKey(name = "FK_VENDA_PRODUTO_VENDIDO"), nullable = false)
     private Venda venda;
 
-    public static ProdutoVenda of(Produto produto, Venda venda, Double quantidade, Double valor) {
+    public static ProdutoVenda of(ProdutoFilial produto, Venda venda, Double quantidade, Double valor) {
         return ProdutoVenda.builder()
-                .produto(produto)
+                .produtoFilial(produto)
                 .venda(venda)
                 .quantidade(quantidade)
                 .subTotal(valor)

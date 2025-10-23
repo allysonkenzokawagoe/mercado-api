@@ -1,18 +1,16 @@
 package com.teste.project.modulos.filiais.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.teste.project.modulos.endereco.model.Endereco;
 import com.teste.project.modulos.mercado.model.Mercado;
-import com.teste.project.modulos.user.model.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString(exclude = {"endereco", "usuarios"})
+@ToString(exclude = {"endereco"})
 @Entity
 @Table(name = "FILIAL")
 public class Filial {
@@ -21,19 +19,21 @@ public class Filial {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "CNPJ")
+    private String cnpj;
+
     @OneToOne
     private Endereco endereco;
 
     @ManyToOne
-    @JoinColumn(name = "FK_MERCADO", foreignKey = @ForeignKey(name = "FK_MERCADO_FILIAL"), nullable = false)
+    @JoinColumn(name = "FK_MERCADO")
+    @JsonBackReference
     private Mercado mercado;
 
-    @OneToMany(mappedBy = "filial")
-    private List<Usuario> usuarios;
-
-    public static Filial of(Endereco endereco, Mercado mercado) {
+    public static Filial of(Endereco endereco, String cnpj, Mercado mercado) {
         return Filial.builder()
                 .endereco(endereco)
+                .cnpj(cnpj)
                 .mercado(mercado)
                 .build();
     }

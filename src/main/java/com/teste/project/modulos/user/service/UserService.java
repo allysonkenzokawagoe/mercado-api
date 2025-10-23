@@ -35,14 +35,16 @@ public class UserService {
     @Transactional
     public void register(UserRequest request, Integer filialId) {
         validarEmail(request.email());
-        var user = Usuario.of(request);
+
+        var filial = filialService.getById(filialId);
+        var user = Usuario.of(request, filial);
         var cargo = cargoService.getById(request.cargoId());
         var endereco = enderecoService.salvarEndereco(request.enderecoRequest().numero(), request.cepRequest().cep());
-        var filial = filialService.getById(filialId);
+
         user.setSenha(passwordEncoder.encode(request.senha()));
         user.setCargo(cargo);
         user.setEndereco(endereco);
-        user.setFilial(filial);
+
         repository.save(user);
     }
 

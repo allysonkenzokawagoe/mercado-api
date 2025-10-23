@@ -12,8 +12,6 @@ public record ProdutoRequest(
         @NotBlank
         String descricao,
         @NotNull
-        Double preco,
-        @NotNull
         ETipoMedida tipoMedida,
         @NotNull
         Integer categoriaId

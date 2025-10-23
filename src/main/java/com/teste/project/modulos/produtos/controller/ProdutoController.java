@@ -17,14 +17,9 @@ public class ProdutoController {
 
     private final ProdutoService service;
 
-    @PostMapping("{filialId}/cadastrar")
-    public void cadastrar(@PathVariable Integer filialId, @RequestBody @Valid ProdutoRequest request) {
-        service.cadastrar(request, filialId);
-    }
-
-    @PostMapping("{produtoId}/adicionar-estoque")
-    public void adicionarAoEstoque(@PathVariable Integer produtoId, @RequestBody Double quantidade) {
-        service.adicionarAoEstoque(produtoId, quantidade);
+    @PostMapping("cadastrar")
+    public void cadastrar(@RequestBody @Valid ProdutoRequest request) {
+        service.cadastrar(request);
     }
 
     @GetMapping

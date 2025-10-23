@@ -8,7 +8,6 @@ import com.teste.project.modulos.user.dto.UsuarioResponse;
 import com.teste.project.modulos.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor

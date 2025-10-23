@@ -13,7 +13,7 @@ public class FilialController {
     private final FilialService filialService;
 
     @PostMapping("{mercadoId}")
-    public void salvar(@PathVariable(name = "mercadoId") Integer mercadoId, @RequestBody FilialRequest filialRequest) {
+    public void salvar(@RequestBody FilialRequest filialRequest, @PathVariable Integer mercadoId) {
         filialService.salvar(filialRequest, mercadoId);
     }
 

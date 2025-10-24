@@ -1,11 +1,11 @@
 package com.teste.project.modulos.user.controller;
 
 import com.teste.project.modulos.comum.dto.PageResponse;
-import com.teste.project.modulos.user.dto.UserRequest;
+import com.teste.project.modulos.user.dto.UsuarioRequest;
 import com.teste.project.modulos.user.dto.UsuarioFiltro;
 import com.teste.project.modulos.user.dto.UsuarioRequestEdit;
 import com.teste.project.modulos.user.dto.UsuarioResponse;
-import com.teste.project.modulos.user.service.UserService;
+import com.teste.project.modulos.user.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/usuario")
 public class UsuarioController {
 
-    private final UserService service;
+    private final UsuarioService service;
 
     @PostMapping("{filialId}")
-    public void cadastrar(@Valid @RequestBody UserRequest request, @PathVariable(name = "filialId") Integer filialId) {
-        service.register(request, filialId);
+    public void cadastrar(@Valid @RequestBody UsuarioRequest request, @PathVariable(name = "filialId") Integer filialId) {
+        service.registrar(request, filialId);
     }
 
     @GetMapping("{cargoId}")

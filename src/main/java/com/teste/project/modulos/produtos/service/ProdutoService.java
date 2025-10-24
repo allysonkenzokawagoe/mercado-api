@@ -2,6 +2,7 @@ package com.teste.project.modulos.produtos.service;
 
 import com.teste.project.modulos.categoria.service.CategoriaService;
 import com.teste.project.modulos.comum.dto.PageResponse;
+import com.teste.project.modulos.comum.exceptions.NotFoundException;
 import com.teste.project.modulos.comum.exceptions.ValidacaoException;
 import com.teste.project.modulos.produtos.dto.ProdutoRequest;
 import com.teste.project.modulos.produtos.dto.ProdutoRequestEdit;
@@ -54,7 +55,7 @@ public class ProdutoService {
     }
 
     public Produto getById(Integer id) {
-        return repository.findById(id).orElseThrow(() -> new ValidacaoException("Produto não encontrado"));
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Produto não encontrado"));
     }
 
     public Produto save(Produto produto) {

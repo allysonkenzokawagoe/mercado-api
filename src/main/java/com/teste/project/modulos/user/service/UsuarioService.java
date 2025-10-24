@@ -4,16 +4,17 @@ import com.teste.project.modulos.autenticacao.service.AutenticacaoService;
 import com.teste.project.modulos.cargo.service.CargoService;
 import com.teste.project.modulos.comum.dto.PageResponse;
 import com.teste.project.modulos.comum.exceptions.NotFoundException;
+import com.teste.project.modulos.comum.exceptions.ValidacaoException;
 import com.teste.project.modulos.endereco.service.EnderecoService;
 import com.teste.project.modulos.filiais.service.FilialService;
-import com.teste.project.modulos.user.dto.UserRequest;
+import com.teste.project.modulos.user.dto.UsuarioRequest;
 import com.teste.project.modulos.user.dto.UsuarioFiltro;
 import com.teste.project.modulos.user.dto.UsuarioRequestEdit;
 import com.teste.project.modulos.user.dto.UsuarioResponse;
 import com.teste.project.modulos.user.enums.ESituacao;
 import com.teste.project.modulos.user.mapper.UsuarioMapper;
 import com.teste.project.modulos.user.model.Usuario;
-import com.teste.project.modulos.user.repository.UserRepository;
+import com.teste.project.modulos.user.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,9 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UsuarioService {
 
-    private final UserRepository repository;
+    private final UsuarioRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final EnderecoService enderecoService;
     private final CargoService cargoService;
@@ -33,7 +34,7 @@ public class UserService {
     private final UsuarioMapper mapper;
 
     @Transactional
-    public void register(UserRequest request, Integer filialId) {
+    public void registrar(UsuarioRequest request, Integer filialId) {
         validarEmail(request.email());
 
         var filial = filialService.getById(filialId);
@@ -66,6 +67,13 @@ public class UserService {
         repository.save(usuario);
     }
 
+    @Transactional
+    public void ativar(String id) {
+        var usuario = getById(id);
+        usuario.setSituacao(ESituacao.ATIVO);
+        repository.save(usuario);
+    }
+
     public PageResponse<UsuarioResponse> findAllByCargoId(Integer cargoId) {
         var pageRequest = PageRequest.of(0, 20);
         var usuarios = repository.findAllByCargoId(cargoId, pageRequest).map(mapper::toResponse);
@@ -80,12 +88,12 @@ public class UserService {
     }
 
     public Usuario getById(String id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Usuáiro não encontrado!"));
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Usuário não encontrado!"));
     }
 
     private void validarEmail(String email) {
         if(repository.existsByEmail(email)) {
-            throw new NotFoundException("Email existente");
+            throw new ValidacaoException("Email existente");
         }
     }
 }

@@ -2,7 +2,7 @@ package com.teste.project.modulos.autenticacao.service;
 
 import com.teste.project.modulos.autenticacao.dto.UsuarioAutenticado;
 import com.teste.project.modulos.comum.exceptions.NotFoundException;
-import com.teste.project.modulos.user.repository.UserRepository;
+import com.teste.project.modulos.user.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +17,7 @@ public class AutenticacaoService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final UserRepository userRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public UsuarioAutenticado autenticarUsuario(String username, String password) {
         var authToken = new UsernamePasswordAuthenticationToken(username, password);
@@ -35,7 +35,7 @@ public class AutenticacaoService {
             return jwtService.getTokenData()
                     .map(UsuarioAutenticado::new)
                     .orElseGet(() -> UsuarioAutenticado.of(
-                            userRepository.findById(getUsuarioId()).orElseThrow(() -> new NotFoundException("Usuário não encontrado"))
+                            usuarioRepository.findById(getUsuarioId()).orElseThrow(() -> new NotFoundException("Usuário não encontrado"))
                     ));
         }
         return null;

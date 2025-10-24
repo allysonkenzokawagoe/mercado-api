@@ -24,7 +24,7 @@ public class ProdutoVendaService {
     @Transactional
     public void cadastrarProdutoVenda(Integer vendaId, Integer produtoFilialId, Double quantidade) {
         var venda = vendaService.getById(vendaId);
-        var produto = produtoFilialService.findById(produtoFilialId);
+        var produto = produtoFilialService.getById(produtoFilialId);
         var valor = quantidade * produto.getPreco();
         var produtoVenda = ProdutoVenda.of(produto, venda, quantidade, valor);
         var estoque = estoqueService.getByProdutoId(produtoFilialId);
@@ -40,7 +40,9 @@ public class ProdutoVendaService {
         var produtosVenda = getProdutosVendidos(vendaId);
         var venda = vendaService.getById(vendaId);
 
-        produtosVenda.forEach(prod -> venda.setValor(venda.getValor() + prod.getSubTotal()));
+        produtosVenda.forEach(prod ->
+                venda.setValor(venda.getValor() + prod.getSubTotal())
+        );
 
         venda.setTipoPagamento(tipoPagamento);
         venda.setDataVenda(LocalDateTime.now());

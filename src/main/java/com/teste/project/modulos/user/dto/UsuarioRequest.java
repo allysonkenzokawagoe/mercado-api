@@ -5,7 +5,7 @@ import com.teste.project.modulos.endereco.dto.EnderecoRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record UserRequest(
+public record UsuarioRequest(
         @NotBlank
         String nome,
         @NotBlank

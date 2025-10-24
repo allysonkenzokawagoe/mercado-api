@@ -1,6 +1,7 @@
 package com.teste.project.modulos.produto.service;
 
 import com.teste.project.modulos.categoria.service.CategoriaService;
+import com.teste.project.modulos.comum.exceptions.NotFoundException;
 import com.teste.project.modulos.comum.exceptions.ValidacaoException;
 import com.teste.project.modulos.estoque.repository.EstoqueRepository;
 import com.teste.project.modulos.estoque.service.EstoqueService;
@@ -15,7 +16,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.teste.project.modulos.categoria.helper.CategoriaHelper.umaCategoria;
@@ -86,5 +90,38 @@ public class ProdutoServiceTest {
 
         verify(mapper).map(requestEdit, produto);
         verify(repository).save(produto);
+    }
+
+    @Test
+    void buscarTodos_deveRetornarTodosProdutos_quandoSolicitado() {
+        var paginaProduto = new PageImpl<>(List.of(umProduto()));
+        when(repository.findAll(PageRequest.of(0, 10))).thenReturn(paginaProduto);
+
+        assertThatCode(() -> service.listarTodos()).doesNotThrowAnyException();
+
+        verify(repository).findAll(PageRequest.of(0, 10));
+    }
+
+    @Test
+    void getById_deveRetornarProduto_quandoExistente() {
+        when(repository.findById(1)).thenReturn(Optional.of(umProduto()));
+
+        assertThatCode(() -> service.getById(1)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void getById_deveLancarNotFoundException_quandoProdutoNaoExistente() {
+        when(repository.findById(1)).thenReturn(Optional.empty());
+
+        assertThatCode(() -> service.getById(1))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Produto não encontrado");
+    }
+
+    @Test
+    void save_deveSalvarProduto_quandoSolicitado() {
+        assertThatCode(() -> service.save(umProduto())).doesNotThrowAnyException();
+
+        verify(repository).save(umProduto());
     }
 }

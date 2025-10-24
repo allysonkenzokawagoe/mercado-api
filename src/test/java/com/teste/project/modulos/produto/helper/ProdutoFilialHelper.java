@@ -20,4 +20,14 @@ public class ProdutoFilialHelper {
         );
     }
 
+    public static ProdutoFilial umProdutoFilialCriado() {
+        return new ProdutoFilial(
+                null,
+                8.99,
+                ESituacaoProduto.FORA_ESTOQUE,
+                umProduto(),
+                umaFilial()
+        );
+    }
+
 }

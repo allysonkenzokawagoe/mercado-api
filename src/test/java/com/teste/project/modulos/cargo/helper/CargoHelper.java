@@ -1,6 +1,7 @@
 package com.teste.project.modulos.cargo.helper;
 
 import com.teste.project.modulos.cargo.dto.CargoRequest;
+import com.teste.project.modulos.cargo.dto.CargoResponse;
 import com.teste.project.modulos.cargo.model.Cargo;
 import com.teste.project.modulos.comum.enums.EPermissao;
 import lombok.experimental.UtilityClass;
@@ -24,6 +25,12 @@ public class CargoHelper {
         return new CargoRequest(
                 "Administrador",
                 EPermissao.ADMIN
+        );
+    }
+
+    public static CargoResponse umCargoResponse() {
+        return new CargoResponse(
+                "Administrador"
         );
     }
 

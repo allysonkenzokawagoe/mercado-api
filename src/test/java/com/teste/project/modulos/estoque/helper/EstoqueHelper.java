@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 import static com.teste.project.modulos.filial.helper.FilialHelper.umaFilial;
 import static com.teste.project.modulos.produto.helper.ProdutoFilialHelper.umProdutoFilial;
+import static com.teste.project.modulos.produto.helper.ProdutoFilialHelper.umProdutoFilialCriado;
 
 @UtilityClass
 public class EstoqueHelper {
@@ -18,6 +19,16 @@ public class EstoqueHelper {
                 LocalDateTime.now().withNano(0),
                 umaFilial(),
                 umProdutoFilial()
+        );
+    }
+
+    public static Estoque umEstoqueVazio() {
+        return new Estoque(
+                1,
+                0.0,
+                LocalDateTime.now().withNano(0),
+                umaFilial(),
+                umProdutoFilialCriado()
         );
     }
 }

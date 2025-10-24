@@ -44,7 +44,7 @@ public class ProdutoFilialService {
         return estoque;
     }
 
-    public ProdutoFilial findById(Integer id) {
+    public ProdutoFilial getById(Integer id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Produto não encontrado nesta filial"));
     }
 

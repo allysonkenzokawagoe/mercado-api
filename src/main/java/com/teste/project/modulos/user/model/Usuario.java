@@ -5,8 +5,7 @@ import com.teste.project.modulos.cargo.model.Cargo;
 import com.teste.project.modulos.comum.utils.IdUtils;
 import com.teste.project.modulos.endereco.model.Endereco;
 import com.teste.project.modulos.filiais.model.Filial;
-import com.teste.project.modulos.mercado.model.Mercado;
-import com.teste.project.modulos.user.dto.UserRequest;
+import com.teste.project.modulos.user.dto.UsuarioRequest;
 import com.teste.project.modulos.user.enums.ESituacao;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -66,7 +65,7 @@ public class Usuario implements UserDetails {
     @JsonBackReference
     private Filial filial;
 
-    public static Usuario of(UserRequest request, Filial filial) {
+    public static Usuario of(UsuarioRequest request, Filial filial) {
         return Usuario.builder()
                 .nome(request.nome())
                 .email(request.email())

@@ -1,18 +1,12 @@
 package com.teste.project.modulos.produto.helper;
 
-import com.teste.project.modulos.estoque.model.Estoque;
 import com.teste.project.modulos.produtos.dto.ProdutoRequest;
 import com.teste.project.modulos.produtos.dto.ProdutoRequestEdit;
-import com.teste.project.modulos.produtos.enums.ESituacaoProduto;
 import com.teste.project.modulos.produtos.enums.ETipoMedida;
 import com.teste.project.modulos.produtos.model.Produto;
 import lombok.experimental.UtilityClass;
 
-import java.time.LocalDateTime;
-
 import static com.teste.project.modulos.categoria.helper.CategoriaHelper.umaCategoria;
-import static com.teste.project.modulos.estoque.helper.EstoqueHelper.umEstoque;
-import static com.teste.project.modulos.filial.helper.FilialHelper.umaFilial;
 
 @UtilityClass
 public class ProdutoHelper {

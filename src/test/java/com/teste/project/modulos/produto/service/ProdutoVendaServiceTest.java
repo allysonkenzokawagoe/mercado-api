@@ -1,6 +1,8 @@
 package com.teste.project.modulos.produto.service;
 
+import com.teste.project.modulos.endereco.service.EnderecoService;
 import com.teste.project.modulos.estoque.service.EstoqueService;
+import com.teste.project.modulos.produtos.dto.VendaDto;
 import com.teste.project.modulos.produtos.model.ProdutoVenda;
 import com.teste.project.modulos.produtos.repository.ProdutoVendaRepository;
 import com.teste.project.modulos.produtos.service.ProdutoFilialService;
@@ -14,6 +16,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.util.List;
 
@@ -30,6 +33,9 @@ import static org.mockito.Mockito.when;
 public class ProdutoVendaServiceTest {
 
     @Mock
+    private RabbitTemplate rabbitTemplate;
+
+    @Mock
     private ProdutoVendaRepository repository;
 
     @Mock
@@ -37,6 +43,9 @@ public class ProdutoVendaServiceTest {
 
     @Mock
     private VendaService vendaService;
+
+    @Mock
+    private EnderecoService enderecoService;
 
     @Mock
     private EstoqueService estoqueService;
@@ -67,13 +76,16 @@ public class ProdutoVendaServiceTest {
         when(service.getProdutosVendidos(1)).thenReturn(List.of(umProdutoVenda()));
         when(vendaService.getById(1)).thenReturn(umaVenda());
 
-        assertThatCode(() -> service.finalizarVenda(1, ETipoPagamento.CARTAO_DEBITO)).doesNotThrowAnyException();
+        assertThatCode(() -> service.finalizarVenda(1, 1, ETipoPagamento.CARTAO_DEBITO)).doesNotThrowAnyException();
 
         var captor = ArgumentCaptor.forClass(Venda.class);
         verify(vendaService).save(captor.capture());
 
         var salvo  = captor.getValue();
         assertEquals(ETipoPagamento.CARTAO_DEBITO, salvo.getTipoPagamento());
+
+        var vendaDto = VendaDto.of(salvo);
+        verify(rabbitTemplate).convertAndSend("pedido.aberto", "pagamento.sucesso", vendaDto);
     }
 
     @Test

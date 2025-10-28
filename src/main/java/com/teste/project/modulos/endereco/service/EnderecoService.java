@@ -1,5 +1,6 @@
 package com.teste.project.modulos.endereco.service;
 
+import com.teste.project.modulos.comum.exceptions.NotFoundException;
 import com.teste.project.modulos.endereco.dto.CepResponse;
 import com.teste.project.modulos.endereco.model.Endereco;
 import com.teste.project.modulos.endereco.repository.EnderecoRepository;
@@ -23,6 +24,10 @@ public class EnderecoService {
     public Endereco salvarEndereco(Integer numero, Integer cep) {
         var endereco = Endereco.of(buscarEnderecoPorCep(cep), numero);
         return repository.save(endereco);
+    }
+
+    public Endereco getById(Integer id) {
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Endereço não encontrado"));
     }
 
     public CepResponse buscarEnderecoPorCep(Integer cep){

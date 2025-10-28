@@ -1,6 +1,8 @@
 package com.teste.project.modulos.venda.model;
 
+import com.teste.project.modulos.endereco.model.Endereco;
 import com.teste.project.modulos.produtos.model.ProdutoVenda;
+import com.teste.project.modulos.user.model.Usuario;
 import com.teste.project.modulos.venda.enums.ETipoPagamento;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,12 +35,19 @@ public class Venda {
     @Column(name = "TIPO_PAGAMENTO")
     private ETipoPagamento tipoPagamento;
 
-    @OneToMany
+    @OneToMany(mappedBy = "venda")
     private List<ProdutoVenda> produtoVendidos;
 
-    public static Venda of() {
+    @ManyToOne
+    private Endereco endereco;
+
+    @ManyToOne
+    private Usuario usuario;
+
+    public static Venda of(Usuario usuario) {
         return Venda.builder()
                 .valor(0.0)
+                .usuario(usuario)
                 .build();
     }
 }

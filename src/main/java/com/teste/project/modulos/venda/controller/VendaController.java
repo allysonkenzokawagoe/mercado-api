@@ -24,8 +24,8 @@ public class VendaController {
         produtoVendaService.cadastrarProdutoVenda(vendaId, produtoId, quantidade);
     }
 
-    @PostMapping("{vendaId}/finalizar")
-    public void finalizarVenda(@PathVariable Integer vendaId, @RequestBody ETipoPagamento tipoPagamento) {
-        produtoVendaService.finalizarVenda(vendaId, tipoPagamento);
+    @PostMapping("{vendaId}/{enderecoId}/finalizar")
+    public void finalizarVenda(@PathVariable Integer vendaId, @PathVariable Integer enderecoId, @RequestBody ETipoPagamento tipoPagamento) {
+        produtoVendaService.finalizarVenda(vendaId, enderecoId, tipoPagamento);
     }
 }

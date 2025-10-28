@@ -57,6 +57,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/produto", "/api/produto/**").permitAll()
                         .requestMatchers("/api/produto-filial", "/api/produto-filial/**").permitAll()
                         .requestMatchers("/api/estoque", "/api/estoque/**").permitAll()
+                        .requestMatchers("/api/venda",  "/api/venda/**").hasAnyRole("ADMIN", "GERENTE", "FUNCIONARIO")
+                        .requestMatchers("/api/entrega").hasAnyRole("ADMIN", "GERENTE", "FUNCIONARIO")
                         .anyRequest().authenticated())
                 .formLogin(FormLoginConfigurer::disable)
                 .sessionManagement(ss -> ss.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

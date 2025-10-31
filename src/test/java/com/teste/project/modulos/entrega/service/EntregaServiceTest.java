@@ -10,6 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
+import static com.teste.project.modulos.entrega.helper.EntregaHelper.umaEntrega;
 import static com.teste.project.modulos.venda.helper.VendaHelper.umaVenda;
 import static com.teste.project.modulos.venda.helper.VendaHelper.umaVendaDto;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -38,6 +41,11 @@ public class EntregaServiceTest {
         verify(repository).save(captor.capture());
     }
 
+    @Test
+    void buscarTodos_deveBuscarTodasEntregas_quandoSolicitado() {
+        when(repository.findAll()).thenReturn(List.of(umaEntrega()));
 
+        assertThatCode(() -> service.buscarTodos()).doesNotThrowAnyException();
+    }
 
 }

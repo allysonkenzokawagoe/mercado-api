@@ -1,6 +1,7 @@
 package com.teste.project.modulos.entrega.model;
 
 import com.teste.project.modulos.endereco.model.Endereco;
+import com.teste.project.modulos.entrega.enums.ESituacaoEntrega;
 import com.teste.project.modulos.produtos.dto.VendaDto;
 import com.teste.project.modulos.venda.model.Venda;
 import jakarta.persistence.*;
@@ -24,6 +25,10 @@ public class Entrega {
     @Column(name = "CLIENTE_NOME")
     private String clienteNome;
 
+    @Column(name = "SITUACAO")
+    @Enumerated(EnumType.STRING)
+    private ESituacaoEntrega situacao;
+
     @ManyToOne
     @JoinColumn(name = "FK_ENDERECO", foreignKey = @ForeignKey(name = "FK_ENDERECO_ENTREGA"), nullable = false)
     private Endereco endereco;
@@ -36,6 +41,7 @@ public class Entrega {
         return Entrega.builder()
                 .clienteNome(venda.nomeCliente())
                 .endereco(venda.endereco())
+                .situacao(ESituacaoEntrega.ENTREGA_ANDAMENTO)
                 .build();
     }
 

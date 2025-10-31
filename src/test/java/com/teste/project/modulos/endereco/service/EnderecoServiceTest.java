@@ -1,5 +1,6 @@
 package com.teste.project.modulos.endereco.service;
 
+import com.teste.project.modulos.comum.exceptions.NotFoundException;
 import com.teste.project.modulos.endereco.dto.CepResponse;
 import com.teste.project.modulos.endereco.repository.EnderecoRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
 
 import static com.teste.project.modulos.endereco.helper.EnderecoHelper.umCepResponse;
 import static com.teste.project.modulos.endereco.helper.EnderecoHelper.umEndereco;
@@ -48,6 +51,22 @@ public class EnderecoServiceTest {
         when(restTemplate.getForObject("https://viacep.com.br/ws/86600137/json/", CepResponse.class)).thenReturn(umCepResponse());
 
         assertThatCode(() -> service.buscarEnderecoPorCep(86600137)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void getById_deveRetornarEndereco_quandoSolicitado() {
+        when(repository.findById(1)).thenReturn(Optional.of(umEndereco()));
+
+        assertThatCode(() -> service.getById(1)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void getById_deveLancarNotFoundException_quandoNaoEncontrado() {
+        when(repository.findById(1)).thenReturn(Optional.empty());
+
+        assertThatCode(() -> service.getById(1))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Endereço não encontrado");
     }
 
 }

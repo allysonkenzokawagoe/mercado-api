@@ -1,5 +1,7 @@
 package com.teste.project.modulos.entrega.service;
 
+import com.teste.project.modulos.comum.exceptions.NotFoundException;
+import com.teste.project.modulos.entrega.enums.ESituacaoEntrega;
 import com.teste.project.modulos.entrega.model.Entrega;
 import com.teste.project.modulos.entrega.repository.EntregaRepository;
 import com.teste.project.modulos.produtos.dto.VendaDto;
@@ -24,6 +26,24 @@ public class EntregaService {
         var entrega = Entrega.of(venda);
         entrega.setVenda(vendaService.getById(venda.id()));
         repository.save(entrega);
+    }
+
+    @Transactional
+    public void finalizarEntrega(Integer id) {
+        var entrega = getById(id);
+        entrega.setSituacao(ESituacaoEntrega.ENTREGA_FINALIZADA);
+        repository.save(entrega);
+    }
+
+    @Transactional
+    public void cancelarEntrega(Integer id) {
+        var entrega = getById(id);
+        entrega.setSituacao(ESituacaoEntrega.ENTREGA_CANCELADA);
+        repository.save(entrega);
+    }
+
+    public Entrega getById(Integer id) {
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Entrega não encontrada"));
     }
 
     public List<Entrega> buscarTodos() {

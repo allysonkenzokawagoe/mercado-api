@@ -1,6 +1,8 @@
 package com.teste.project.modulos.produtos.controller;
 
+import com.teste.project.modulos.comum.dto.PageRequest;
 import com.teste.project.modulos.comum.dto.PageResponse;
+import com.teste.project.modulos.produtos.dto.ProdutoFiltro;
 import com.teste.project.modulos.produtos.dto.ProdutoRequest;
 import com.teste.project.modulos.produtos.dto.ProdutoRequestEdit;
 import com.teste.project.modulos.produtos.dto.ProdutoResponse;
@@ -23,8 +25,8 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public PageResponse<ProdutoResponse> listarTodos() {
-        return service.listarTodos();
+    public PageResponse<ProdutoResponse> listarTodos(ProdutoFiltro filtros, PageRequest pageable) {
+        return service.listarTodos(filtros, pageable);
     }
 
     @PutMapping("{id}")

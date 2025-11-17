@@ -1,8 +1,10 @@
 package com.teste.project.modulos.cargo.controller;
 
+import com.teste.project.modulos.cargo.dto.CargoFiltros;
 import com.teste.project.modulos.cargo.dto.CargoRequest;
 import com.teste.project.modulos.cargo.model.Cargo;
 import com.teste.project.modulos.cargo.service.CargoService;
+import com.teste.project.modulos.comum.dto.PageRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,8 +23,8 @@ public class CargoController {
     }
 
     @GetMapping
-    public Page<Cargo> listarTodos() {
-        return service.listarCargos();
+    public Page<Cargo> listarTodos(CargoFiltros filtros, PageRequest pageable) {
+        return service.listarCargos(filtros, pageable);
     }
 
 }

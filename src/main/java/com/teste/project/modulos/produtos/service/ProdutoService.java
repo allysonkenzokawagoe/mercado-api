@@ -1,9 +1,11 @@
 package com.teste.project.modulos.produtos.service;
 
 import com.teste.project.modulos.categoria.service.CategoriaService;
+import com.teste.project.modulos.comum.dto.PageRequest;
 import com.teste.project.modulos.comum.dto.PageResponse;
 import com.teste.project.modulos.comum.exceptions.NotFoundException;
 import com.teste.project.modulos.comum.exceptions.ValidacaoException;
+import com.teste.project.modulos.produtos.dto.ProdutoFiltro;
 import com.teste.project.modulos.produtos.dto.ProdutoRequest;
 import com.teste.project.modulos.produtos.dto.ProdutoRequestEdit;
 import com.teste.project.modulos.produtos.dto.ProdutoResponse;
@@ -12,7 +14,6 @@ import com.teste.project.modulos.produtos.model.Produto;
 import com.teste.project.modulos.produtos.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -48,9 +49,9 @@ public class ProdutoService {
         return mapper.toResponse(produto);
     }
 
-    public PageResponse<ProdutoResponse> listarTodos() {
-        var pageable = PageRequest.of(0, 10);
-        var produtosResponse = repository.findAll(pageable).map(mapper::toResponse);
+    public PageResponse<ProdutoResponse> listarTodos(ProdutoFiltro filtros, PageRequest pageable) {
+        var predicate = filtros.toPredicate();
+        var produtosResponse = repository.findAll(predicate, pageable).map(mapper::toResponse);
         return PageResponse.from(produtosResponse);
     }
 

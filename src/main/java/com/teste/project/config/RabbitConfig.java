@@ -41,11 +41,4 @@ public class RabbitConfig {
                 .to(exchange)
                 .with("pagamento.sucesso");
     }
-
-    @Bean
-    public Binding binding() {
-        return BindingBuilder.bind(deadLetterQueue())
-                .to(deadLetterExchange())
-                .with("");
-    }
 }
